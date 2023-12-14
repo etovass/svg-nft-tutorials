@@ -41,4 +41,4 @@ where:
 - ``../tutorial-1-basic-svg-rendering/`` is the root directory of the foundry project 
 - ``test/BasicSVGRenderer.t.sol`` is the relative path (from the rood foundry project directory) to the test that we want to execute
 - ``testSvgRenderer`` is the test method in the test contract 
-- ``123`` is the default/initial ID of the token that will be show. You can change it late in the browser easily 
+- ``123`` is the default/initial ID of the token that will be shown. You can change it late in the browser easily 

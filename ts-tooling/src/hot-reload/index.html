@@ -1,0 +1,140 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            const sse = new EventSource('/changes');
+            sse.addEventListener('change', () => window.location.reload());
+        </script>
+        <title>SVG NFT</title>
+
+        <style>
+            .borderRect {border: 1px solid #ccc; padding: 5px;}
+            .string { color: green; }
+            .number { color: darkorange; }
+            .boolean { color: blue; }
+            .null { color: magenta; }
+            .key { color: rgb(49, 0, 172); }
+        </style>
+    </head>
+
+
+    <body class="font-mono text-sm">
+        <% if (it.errorContent) { %>
+            <pre class="text-red-500 whitespace-pre-wrap w-screen"><%~ it.errorContent %></pre>
+        <% } else { %>
+            <div class=<% if (it.responsive) { %> "w-full" <% } else { %> "w-[<%= it.width %>px]" <% } %> >
+                <div class="mx-4 mt-4 justify-between items-center flex flex-row">
+                    <div>
+                        <span>Gas:</span>
+                        <% if (it.gas) { %>
+                            <% if (it.gas < 25_000_000) { %>
+                                <span class="text-green-500"><%= it.gas.toLocaleString("en-US") %></span> 
+                            <% } else if (it.gas >= 30_000_000) { %>
+                                <span class="bg-red-500 text-white"><%= it.gas.toLocaleString("en-US") %></span> 
+                            <% } else { %>
+                                <span class="text-orange-500"><%= it.gas.toLocaleString("en-US") %></span> 
+                            <% } %>   
+                        <% } %>   
+                    </div>
+
+                    <div class="flex flex-row items-center">
+                        <span>Token id</span>
+                        <button id="decr" class="px-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="16" width="14" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
+                        </button>
+                        <input class="w-16 text-right border-2" type="number" id="tokenId" name="tokenId" min="0" value="<%= it.tokenId %>" />
+                        <button id="incr" class="pl-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="16" width="14" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mx-4 mt-1 justify-between items-center flex flex-row">
+                    <div class="flex flex-row items-center">
+                        <span>show border</span>
+                        <input class="ml-2" type="checkbox" id="showBorder" <% if (it.showBorder) { %> checked <% } %>  >
+                    </div>
+                    <div class="flex flex-row items-center">
+                        <span>responsive</span>
+                        <input class="ml-2" type="checkbox" id="responsive" <% if (it.responsive) { %> checked <% } %>  >
+                    </div>
+                </div>
+
+                <div class="m-4 flex <% if (it.responsive) { %> flex-col <% } else { %> flex-row <% } %>">
+                        <div class= "<% if (!it.responsive) { %> min-w-[<%= (it.width-32) %>px] <% } %> border-dashed border-red-500 border-2 <% if (!it.showBorder) { %> border-opacity-0 <% } %>">
+                            <%~ it.content %>
+                        </div>
+
+                        <% if (it.json) { %> 
+                            <div class= "<% if (it.responsive) { %> mt-4 <% } else { %> ml-4 <% } %>">
+                                <div class="text-xs">
+                                    <p class="borderRect <% if (it.responsive) { %> whitespace-pre-wrap <% } else { %> whitespace-pre <% } %>"><%~ it.json %></p>
+                                </div>
+                            </div>
+                        <% } %>
+                </div>
+            </div>
+        <% } %>
+
+        <script>
+            const tokenEl = document.getElementById("tokenId");
+            tokenEl.addEventListener("change", tokenIdChange);
+
+            const responsiveEl = document.getElementById("responsive");
+            responsiveEl.addEventListener("change", responsiveChange);
+
+            const incrEl = document.getElementById("incr");
+            incrEl.addEventListener("click", incrClick);
+
+            const decrEl = document.getElementById("decr");
+            decrEl.addEventListener("click", decrClick);
+
+            const showBorderEl = document.getElementById("showBorder");
+            showBorderEl.addEventListener("click", showBorderClick);
+
+            function refreshPage(e) {
+                window.location.href = "/?id=" + tokenEl.value + (showBorderEl.checked ? "" : "&showBorder=false") + (responsiveEl.checked ? "&responsive=true" : "");
+            }
+
+            function tokenIdChange(e) {
+                refreshPage(e);
+            }
+
+            function responsiveChange(e) {
+                refreshPage(e);
+            }
+
+            function incrClick(e) {
+                let id = parseInt(tokenEl.value);
+                tokenEl.value = id + 1;
+                refreshPage();
+            }
+
+            function decrClick(e) {
+                let id = parseInt(tokenEl.value);
+                tokenEl.value = Math.max(0, id - 1);
+                refreshPage(e);
+            }
+
+            function showBorderClick(e) {
+                refreshPage(e);
+            }
+
+            document.onkeydown = function(e) {
+                 switch (e.keyCode) {
+                    case 37:
+                    case 38:
+                        decrClick(e);
+                        break;
+            
+                    case 39:
+                    case 40:
+                        incrClick(e)
+                        break;
+                }
+            };
+        </script>
+    </body>
+</html>

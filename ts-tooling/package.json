@@ -1,0 +1,39 @@
+{
+  "name": "js-tooling",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "hot-reload": "ts-node --esm ./src/hot-reload/index.ts",
+    "qa-collection": "ts-node --esm ./src/qa-collection/index.ts"
+  },
+  "prettier": {
+    "printWidth": 100,
+    "trailingComma": "es5",
+    "tabWidth": 4,
+    "semi": false,
+    "singleQuote": true
+  },
+  "author": "Eto Vass",
+  "license": "MIT",
+  "dependencies": {
+    "@resvg/resvg-js": "^2.6.0",
+    "chalk": "^5.3.0",
+    "color-json": "^3.0.5",
+    "escape-html": "^1.0.3",
+    "eta": "^3.2.0",
+    "execa": "^8.0.1",
+    "fast-xml-parser": "^4.3.2",
+    "js-base64": "^3.7.5",
+    "json-colorizer": "^2.2.2",
+    "toml": "^3.0.0",
+    "watcher": "^2.3.0",
+    "xml-formatter": "^3.6.0",
+    "xmldom": "^0.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.4",
+    "typescript": "^5.3.3"
+  }
+}

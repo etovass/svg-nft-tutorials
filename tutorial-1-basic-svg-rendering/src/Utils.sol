@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.21;
 
+/**
+ * @author Eto Vass
+ */
+
 // copied from: https://github.com/Vectorized/solady/blob/2353e93b77eb6a4a99514c127b753e99a088ae68/src/utils/LibString.sol#L31
 
 library Utils {

@@ -4,6 +4,12 @@ pragma solidity ^0.8.21;
 import { Test } from "forge-std/Test.sol";
 import "forge-std/console.sol";
 
+/**
+ * @author Eto Vass
+ * @notice Tests that will be invoked from the ts-tooling must extend this abstract contract and implement
+ *   renderContract() function. They also must call testRederer() from public function that starts with 'test'
+ */
+
 abstract contract AbstractTest is Test {
     string internal constant NFT_ID = "NFT_ID";
     string internal constant NFT_GAS = "NFT_GAS";

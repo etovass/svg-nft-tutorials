@@ -5,8 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "hot-reload": "ts-node --esm ./src/hot-reload/index.ts",
-    "qa-collection": "ts-node --esm ./src/qa-collection/index.ts"
+    "hot-reload": "node --loader ts-node/esm ./src/hot-reload/index.ts",
+    "qa-collection": "node --loader ts-node/esm ./src/qa-collection/index.ts"
   },
   "prettier": {
     "printWidth": 100,
@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.10.4",
+    "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   }
 }

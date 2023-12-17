@@ -2,10 +2,9 @@ import { execaCommand } from 'execa'
 import fs from 'fs';
 import chalk from 'chalk'
 import * as path from 'path'
-import { XMLValidator } from 'fast-xml-parser'
 import xmlFormat from 'xml-formatter'
 import escapeHtml from 'escape-html'
-import { DOMParser } from 'xmldom'
+import { DOMParser } from '@xmldom/xmldom'
 
 import { parseOutput } from './parser.ts'
 import { formatNumber } from './utils.ts'

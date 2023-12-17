@@ -53,6 +53,9 @@ export async function main() {
         return result
     }
 
+    console.log('\n\nStarting (may take several seconds to compile the contracts...)');
+    await handler(parseInt(TEST_ID));
+
     const { notify } = await serve(handler, parseInt(TEST_ID))
     console.log('Watching paths:', pathsToWatch, '\n')
 

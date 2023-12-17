@@ -2,6 +2,13 @@
 
 A tutorial for building fully on-chain SVG NFT projects. Inspired (and based on, but also enhanced): https://github.com/w1nt3r-eth/hot-chain-svg/
 
+## Benefits
+- Based on Foundry - super fast and simple
+- Validates SVG files and Traits JSON
+- Outputs GAS usage
+- Generate PNG files for quickly reviewing the generated collection
+
+
 ## Demo 
 https://github.com/etovass/svg-nft-tutorials/assets/153132866/72c6e9e2-8d53-4a44-ac9e-d92f2dbc0880
 

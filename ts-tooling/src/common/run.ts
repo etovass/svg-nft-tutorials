@@ -1,4 +1,5 @@
 import { execaCommand } from 'execa'
+import fs from 'fs';
 import chalk from 'chalk'
 import * as path from 'path'
 import { XMLValidator } from 'fast-xml-parser'
@@ -48,8 +49,17 @@ export async function callTestContract(
     testContractName: string,
     testContractMethod: string,
     tokenID: number,
-    verbose = false
-) {
+    verbose = false) {
+
+    if (!fs.existsSync(contractRootDir)) {
+        throw new Error('Invalid root dir: ' + path.resolve(contractRootDir))
+    }    
+
+    let pathToContract = path.join(contractRootDir, testContractName);
+    if (!fs.existsSync(pathToContract)) {
+        throw new Error('Cannot find test contract: ' + path.resolve(pathToContract))
+    }
+
     const { stdout, command } = await execaCommand(
         `forge test --root ${contractRootDir} --match-path ${testContractName} --match-test ${testContractMethod} -vv`,
         {
@@ -63,9 +73,7 @@ export async function callTestContract(
 
     let parsedOutput = parseOutput(stdout.toString())
 
-    if (!parsedOutput.gas || Number.isNaN(parsedOutput.gas)) {
-        throw new Error('Invalid root dir: ' + path.resolve(contractRootDir))
-    }
+
 
     validateSvg(parsedOutput.content)
 

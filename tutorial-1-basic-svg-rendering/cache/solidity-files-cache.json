@@ -893,8 +893,8 @@
       }
     },
     "src/BasicSVGRenderer.sol": {
-      "lastModificationDate": 1702237112970,
-      "contentHash": "aa84457e4c53378742b4e64c1fdb6be9",
+      "lastModificationDate": 1702588251681,
+      "contentHash": "d21e5c5da2341fa5387a863969fd6aa8",
       "sourceName": "src/BasicSVGRenderer.sol",
       "solcConfig": {
         "settings": {
@@ -925,10 +925,7 @@
           "libraries": {}
         }
       },
-      "imports": [
-        "src/Random.sol",
-        "src/Utils.sol"
-      ],
+      "imports": [],
       "versionRequirement": "^0.8.21",
       "artifacts": {
         "BasicSVGRenderer": {
@@ -937,8 +934,8 @@
       }
     },
     "src/BasicSVGRenderer2.sol": {
-      "lastModificationDate": 1702249922524,
-      "contentHash": "720ccf426cc184b02992eb9e5d92915b",
+      "lastModificationDate": 1702587283207,
+      "contentHash": "86869e550bf21ff3b3265f4ff415e8b5",
       "sourceName": "src/BasicSVGRenderer2.sol",
       "solcConfig": {
         "settings": {
@@ -981,8 +978,8 @@
       }
     },
     "src/Random.sol": {
-      "lastModificationDate": 1701983513856,
-      "contentHash": "170573e614316bc62d623f93bbb8e5e0",
+      "lastModificationDate": 1702582200399,
+      "contentHash": "3c4adf8ae144f082b39b7b2e6392b774",
       "sourceName": "src/Random.sol",
       "solcConfig": {
         "settings": {
@@ -1022,8 +1019,8 @@
       }
     },
     "src/Utils.sol": {
-      "lastModificationDate": 1702082853146,
-      "contentHash": "93b41fe8bfb3810654bb2ea50bcde7f7",
+      "lastModificationDate": 1702587278702,
+      "contentHash": "0b30e0310aa08e485771ac11eb5b6a2a",
       "sourceName": "src/Utils.sol",
       "solcConfig": {
         "settings": {
@@ -1063,8 +1060,8 @@
       }
     },
     "test/AbstractTest.t.sol": {
-      "lastModificationDate": 1702072337953,
-      "contentHash": "a6b289cc65939a07b18ecdd6df31039b",
+      "lastModificationDate": 1702587281048,
+      "contentHash": "ac41de53d46cd292b3add8fa8336ca2f",
       "sourceName": "test/AbstractTest.t.sol",
       "solcConfig": {
         "settings": {
@@ -1125,8 +1122,8 @@
       }
     },
     "test/BasicSVGRenderer.t.sol": {
-      "lastModificationDate": 1702084774790,
-      "contentHash": "9f408f9f2aa8fe065296bdcb758cabe4",
+      "lastModificationDate": 1702582215290,
+      "contentHash": "db063d59b57ee6e3729277e3de83ae43",
       "sourceName": "test/BasicSVGRenderer.t.sol",
       "solcConfig": {
         "settings": {

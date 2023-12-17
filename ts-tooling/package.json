@@ -19,18 +19,17 @@
   "license": "MIT",
   "dependencies": {
     "@resvg/resvg-js": "^2.6.0",
+    "@xmldom/xmldom": "^0.8.10",
     "chalk": "^5.3.0",
     "color-json": "^3.0.5",
     "escape-html": "^1.0.3",
     "eta": "^3.2.0",
     "execa": "^8.0.1",
-    "fast-xml-parser": "^4.3.2",
     "js-base64": "^3.7.5",
     "json-colorizer": "^2.2.2",
     "toml": "^3.0.0",
     "watcher": "^2.3.0",
-    "xml-formatter": "^3.6.0",
-    "xmldom": "^0.6.0"
+    "xml-formatter": "^3.6.0"
   },
   "devDependencies": {
     "@types/node": "^20.10.4",

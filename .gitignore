@@ -134,3 +134,7 @@ tmp*
 
 # for mac users
 .DS_Store
+
+# foundry
+**/out
+**/cache

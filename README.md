@@ -1,4 +1,9 @@
-# SVG NFT Tutorials
+# SVG On-chain NFT Tutorials
+- Part 1: Basic SVG Rendering - https://www.fullyonchain.art/articles/fully-on-chain-svg-nfts-rendering
+- Part 2: ERC-721 NFT Contract - to be released soon
+- Part 3: Minting website - to be released soon
+
+# SVG On-chain NFT Tooling
 
 A tutorial for building fully on-chain SVG NFT projects. Inspired (and based on, but also enhanced): https://github.com/w1nt3r-eth/hot-chain-svg/
 

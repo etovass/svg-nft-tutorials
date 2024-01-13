@@ -63,12 +63,25 @@
                 </div>
 
                 <div class="m-4 flex <% if (it.responsive) { %> flex-col <% } else { %> flex-row <% } %>">
-                        <div class= "<% if (!it.responsive) { %> min-w-[<%= (it.width-32) %>px] <% } %> border-dashed border-red-500 border-2 <% if (!it.showBorder) { %> border-opacity-0 <% } %>">
-                            <%~ it.content %>
+
+                        <div class="flex flex-col">
+                        <% it.content.forEach( c => { %>
+
+                            <% if (c.label) { %>
+                                <span class= "italic text-xs font-bold">
+                                    <%~ c.label %>
+                                </span>
+                            <% } %>
+
+                            <div class= "<% if (!it.responsive) { %> min-w-[<%= (it.width-32) %>px] <% } %> border-dashed border-red-500 border-2 <% if (!it.showBorder) { %> border-opacity-0 <% } %>">
+                                <%~ c.content %>
+                            </div>
+
+                        <% }) %>
                         </div>
 
                         <% if (it.json) { %> 
-                            <div class= "<% if (it.responsive) { %> mt-4 <% } else { %> ml-4 <% } %>">
+                            <div class= "<% if (it.responsive) { %> mt-4 <% } else { %> ml-4 mt-4 <% } %>">
                                 <div class="text-xs">
                                     <p class="borderRect <% if (it.responsive) { %> whitespace-pre-wrap <% } else { %> whitespace-pre <% } %>"><%~ it.json %></p>
                                 </div>

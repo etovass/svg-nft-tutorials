@@ -75,6 +75,7 @@ contract NFTManager is ERC721AQueryable, ERC2981, Pausable, Ownable, ReentrancyG
         (svg, attributes) = renderer.renderSVG(_tokenId);
 
         string memory image = string.concat('"image":"data:image/svg+xml;base64,', Utils.encode(bytes(svg)),'"');
+        string memory animation = string.concat('"animation_url":"data:image/svg+xml;base64,', Utils.encode(bytes(svg)),'"');
 
         string memory json = string.concat(
             '{"name":"On-chain NFT Tutorial #',
@@ -82,6 +83,7 @@ contract NFTManager is ERC721AQueryable, ERC2981, Pausable, Ownable, ReentrancyG
             '","description":"This is NFT from the On-chain SVG NFT Tutorial by Eto Vass ",',
             attributes,
             ',', image,
+            ',', animation,
             '}'
         );
 

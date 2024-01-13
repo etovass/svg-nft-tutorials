@@ -7,7 +7,8 @@ import { callTestContract, getForgeConfig, FOUNDRY_PROFILE } from '../common/run
 import { formatNumber } from '../common/utils.ts'
 import { fileURLToPath } from 'url'
 import { convertSvgFileToPNG } from './svg-to-png.ts'
-import { colorJson } from '../common/color-json.ts'
+import { colorJsonConsole } from '../common/color-json.ts'
+import { Content } from '../common/parser.ts'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -67,6 +68,25 @@ function addPercentages(json: any) {
     })
 }
 
+function saveSingleContent(svgFolder: string, pngFolder: string, tokenId: number, contentElement: Content) {
+    let preffix = contentElement.label;
+
+    if (preffix) {
+        preffix += '-';
+    } else {
+        preffix = "";
+    }
+
+
+    let svgFile = path.join(svgFolder, preffix + tokenId + '.svg')
+    console.log('saving ', svgFile)
+    fs.writeFileSync(svgFile, contentElement.content)
+
+    let pngFile = path.join(pngFolder, preffix + tokenId + '.png')
+    console.log('saving ', pngFile)
+    convertSvgFileToPNG(contentElement.content, pngFile)
+}
+
 export async function main() {
     if (CMD_PARAMS.length != 5) {
         console.log(
@@ -123,10 +143,8 @@ export async function main() {
             warnings.push(tokenId)
         }
 
-        let svgFile = path.join(svgFolder, tokenId + '.svg')
-        console.log('saving ', svgFile)
-        fs.writeFileSync(svgFile, result.content)
 
+        // save JSON file
         if (result.json) {
             let jsonFile = path.join(jsonFolder, tokenId + '.json')
             console.log('saving ', jsonFile)
@@ -135,9 +153,9 @@ export async function main() {
             processJSON(result.json)
         }
 
-        let pngFile = path.join(pngFolder, tokenId + '.png')
-        console.log('saving ', pngFile)
-        convertSvgFileToPNG(result.content, pngFile)
+        result.content.forEach( c => {
+            saveSingleContent(svgFolder, pngFolder, tokenId, c);
+        })
     }
 
     console.log('------------------------------------')
@@ -167,7 +185,7 @@ export async function main() {
     addPercentages(occurences)
 
     console.log('Occurences: ')
-    console.log(colorJson(occurences))
+    console.log(colorJsonConsole(occurences))
 
     let occurencesFile = path.join(tempFolder, 'occurences.json')
     console.log('saving ', occurencesFile)

@@ -6,8 +6,16 @@ import xmlFormat from 'xml-formatter'
 import escapeHtml from 'escape-html'
 import { DOMParser } from '@xmldom/xmldom'
 
-import { parseOutput } from './parser.ts'
+import { ContentType, ParsedOutput, parseTestOutput } from './parser.ts'
 import { formatNumber } from './utils.ts'
+
+function validateSvgContent(parsedOutput: ParsedOutput) {
+    parsedOutput.content.forEach( c => {
+        if (c.contentType == ContentType.SVG) {
+            validateSvg(c.content);
+        }
+    })
+}
 
 function validateSvg(svg: string) {
     try {
@@ -70,11 +78,9 @@ export async function callTestContract(
         }
     )
 
-    let parsedOutput = parseOutput(stdout.toString())
+    let parsedOutput = parseTestOutput(stdout.toString());
 
-
-
-    validateSvg(parsedOutput.content)
+    validateSvgContent(parsedOutput)
 
     if (verbose) {
         console.log(chalk.bgMagenta(new Date().toISOString()), '\n', command, '\n', stdout)

@@ -1,16 +1,23 @@
-import { Base64 } from 'js-base64'
+import { parseDataUrl } from './data-url-parser.ts';
 
 export enum ContentType {
     SVG,
-    JSON_UTF8,
-    JSON_BASE64,
+    JPG,
+    PNG,
+    HTML, 
+    Unknown
+}
+
+export type Content = {
+    label?: string;                  // usually "image", "image_data" or "animation_url" from tokenUri JSON output; Or empty if result of render method
+    content: string;
+    contentType: ContentType;
 }
 
 export type ParsedOutput = {
-    gas: number
-    content: string
-    contentType: ContentType
-    json?: any
+    gas: number;
+    content: Content[];
+    json?: any;
 }
 
 function getTextBetween(text: string, beginText: string, endText: string): string {
@@ -22,12 +29,6 @@ function getTextBetween(text: string, beginText: string, endText: string): strin
     return subStr
 }
 
-const PREFIX_JSON_BASE64 = 'data:application/json;base64,'
-const PREFIX_JSON_UTF8 = 'data:application/json;utf8,'
-
-const PREFIX_SVG_PURE = 'data:image/svg+xml;<svg'
-const PREFIX_SVG_BASE64 = 'data:image/svg+xml;base64,'
-
 function parseJson(json: string) {
     try {
         return JSON.parse(json)
@@ -36,11 +37,15 @@ function parseJson(json: string) {
     }
 }
 
-function trim(content: string) {
-    return content.substring(0, 30) + '... (' + content.length + ' bytes total)'
+function trim(content: string, trimSize: number) {
+    if (content.length < trimSize) return content;
+    return content.substring(0, trimSize) + '... (' + content.length + ' bytes total)'
 }
 
-export function parseOutput(output: string): ParsedOutput {
+/**
+ *  to be used only to parse the output of AbstractTest.sol
+ */
+export function parseTestOutput(output: string): ParsedOutput {
     let gasString = getTextBetween(output, '<NFT_GAS>', '</NFT_GAS>')
     let gas = parseInt(gasString)
 
@@ -48,57 +53,106 @@ export function parseOutput(output: string): ParsedOutput {
         throw new Error('Invalid gas string. Expecting number, got: ' + gasString + '\n' + output)
     }
 
-    let content = getTextBetween(output, '<NFT_OUTPUT>', '</NFT_OUTPUT>').trim()
-    let contentType: ContentType
-    let json: any = null
+    let content = getTextBetween(output, '<NFT_OUTPUT>', '</NFT_OUTPUT>').trim();
+    return parseContractFunctionOutput(content, gas);
+}
 
-    if (content.startsWith('<svg')) {
-        contentType = ContentType.SVG
-    } else if (content.startsWith(PREFIX_JSON_UTF8)) {
-        contentType = ContentType.JSON_UTF8
-        let jsonStr = content.substring(PREFIX_JSON_UTF8.length)
-        json = parseJson(jsonStr)
-    } else if (content.startsWith(PREFIX_JSON_BASE64)) {
-        contentType = ContentType.JSON_BASE64
-        let jsonStr = Base64.decode(content.substring(PREFIX_JSON_BASE64.length))
-        json = parseJson(jsonStr)
-    } else {
-        throw new Error(
-            'Invalid content. Neither SVG, not json/utf8, not json/base64' + '\n' + output
-        )
-    }
+/**
+ *  to be used to parse the output of render function in the contract or the output from ERC-721 tokenUri()
+ */
+export function parseContractFunctionOutput(output: string, trimSize = 100, gas = 0): ParsedOutput {
+    let json: any = null
+    let content: Content[] = [];
+
+    let mimeContent = parseDataUrl(output);
+
+    if (mimeContent) {
+        if (mimeContent.mediaType == 'application/json') {
+            let jsonStr = mimeContent.data;
+
+            json = parseJson(jsonStr);
+        } 
+    } 
 
     if (json) {
+        let contentFound = false;
+
         if (json.image) {
-            content = json.image
-            json.image = trim(json.image)
-        } else if (json.image_data) {
-            content = json.image_data
-            json.image_data = trim(json.image_data)
-        } else if (json.animation_url) {
-            content = json.animation_url
-            json.animation_url = trim(json.animation_url)
-        } else {
+            contentFound = true;
+            content.push(decodeOutput(json.image, 'image'));
+            json.image = trim(json.image, trimSize);
+        } 
+        
+        if (json.image_data) {
+            contentFound = true;
+            content.push(decodeOutput(json.image_data, 'image_data'));
+            json.image_data = trim(json.image_data, trimSize);
+        } 
+        
+        if (json.animation_url) {
+            contentFound = true;
+            content.push(decodeOutput(json.animation_url, 'animation_url'));
+            json.animation_url = trim(json.animation_url, trimSize);
+        } 
+        
+        if (!contentFound) {
             throw new Error(
                 'Invalid JSON. Content must be in image, image_data or animation_url attribute' +
                     '\n' +
                     JSON.stringify(json, null, 4)
-            )
+            );
         }
-
-        if (content.startsWith(PREFIX_SVG_PURE)) {
-            content = content.substring(PREFIX_SVG_PURE.length - 4) // 4 = '<svg'.length
-        } else if (content.startsWith(PREFIX_SVG_BASE64)) {
-            content = Base64.decode(content.substring(PREFIX_SVG_BASE64.length))
-        } else {
-            throw new Error('Invalid image format' + '\n' + content)
-        }
+    } else {
+        let c = decodeOutput(output);
+        let contentType = c.contentType;
+        output = c.content;
+        content.push({content: output, contentType})
     }
 
     return {
         gas,
         content,
-        contentType,
         json,
     }
+}
+
+function decodeOutput(output: string, label?: string): Content {
+    let mimeContent = parseDataUrl(output);
+    let contentType = ContentType.Unknown;
+    let subtype;
+
+    if (mimeContent) {
+        subtype = mimeContent.mediaType.substring(mimeContent.mediaType.lastIndexOf('/') + 1);
+        if (subtype.endsWith('+xml')) {
+            subtype = subtype.substring(0, subtype.length - 4);
+        }
+    } else {
+        let outputLowercase = output.toLocaleLowerCase();
+
+        if (outputLowercase.startsWith('<svg')) {
+            subtype = 'svg';
+        } else if (outputLowercase.startsWith('<html')) {
+            subtype = 'html';
+        } else {
+            subtype = outputLowercase.substring(outputLowercase.lastIndexOf('.') + 1);
+        }
+    }
+
+    if (subtype == 'svg') {
+        contentType = ContentType.SVG;
+    } else if (subtype == 'png') {
+        contentType = ContentType.PNG;
+    } else if (subtype == 'jpg' || subtype == 'jpeg') {
+        contentType = ContentType.JPG;
+    } else if (subtype == 'html') {
+        contentType = ContentType.HTML;
+    }
+
+    if (contentType == ContentType.Unknown) {
+        throw new Error('Unsupported image format ' + (label ? 'for attribute: ' + label : '') +  ' Not a recognized image! \n' + output);
+    }
+
+    let content = (mimeContent ? mimeContent.data : output);
+
+    return {content, contentType, label};
 }

@@ -7,6 +7,7 @@ import * as path from 'path'
 import { fileURLToPath } from 'url'
 import EventEmitter from 'events'
 import { Eta } from 'eta'
+import { colorJsonHtml } from '../common/color-json.ts'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -65,7 +66,7 @@ export async function serve(handler, initialTokenId: number) {
                 webpage({
                     content: result.content,
                     json: result.json
-                        ? syntaxHighlightJSON(JSON.stringify(result.json, null, 2))
+                        ? colorJsonHtml(JSON.stringify(result.json, null, 2))
                         : '',
                     gas: result.gas,
                     tokenId,
@@ -108,24 +109,4 @@ async function webpage(data: WebpageData) {
     return eta.renderString(indexHtml, data)
 }
 
-function syntaxHighlightJSON(json: string) {
-    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    return json.replace(
-        /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
-        function (match) {
-            var cls = 'number'
-            if (/^"/.test(match)) {
-                if (/:$/.test(match)) {
-                    cls = 'key'
-                } else {
-                    cls = 'string'
-                }
-            } else if (/true|false/.test(match)) {
-                cls = 'boolean'
-            } else if (/null/.test(match)) {
-                cls = 'null'
-            }
-            return '<span class="' + cls + '">' + match + '</span>'
-        }
-    )
-}
+

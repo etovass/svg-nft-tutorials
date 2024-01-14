@@ -3,12 +3,13 @@
 import { useEffect, useState } from 'react';
 import { CUSTOM_NETWORK_ID, NETWORKS, readContract } from './common/read-contract';
 import { BaseError } from 'viem';
-import { Content, ContentType, ParsedOutput, parseContractFunctionOutput } from '../../../../ts-tooling/src/common/parser'
-import { colorJsonHtml } from '../../../../ts-tooling/src/common/color-json'
+import { Content, ContentType, ParsedOutput, parseContractFunctionOutput } from './common/parser';
+import { colorJsonHtml } from './common/color-json';
 import { Base64 } from 'js-base64';
 import { useDefaultOrSearchParam, ParamsMap, encodeParams } from './common/search-param-hook';
 import { useSearchParams } from 'next/navigation';
 import { Tooltip } from 'react-tooltip';
+import useKeypress from 'react-use-keypress';
 
 async function copyToClipboard(text: string) {
     await navigator.clipboard.writeText(text);
@@ -83,7 +84,7 @@ export default function Home() {
         } 
 
         if (c.contentType == ContentType.SVG) {
-            return <img src={'data:image/svg+xml;base64,' + Base64.encode(c.content)}></img>
+            return <img src={'data:image/svg+xml;base64,' + Base64.encode(c.content)} alt=''></img>
         }
 
         // wrap PNG and JPG to img
@@ -91,8 +92,6 @@ export default function Home() {
     }
 
     const invokeContractFunction  = async (myTokenId: number) => {
-        console.log("network id", networkId);
-
         setError("");
         setPageOpacity(0.25);
 
@@ -124,26 +123,13 @@ export default function Home() {
         await invokeContractFunction(tokenId);
     }
 
-    const handleGlobalKeyPress = async (e: any) => {
-        console.log('tokenId=', tokenId);
-
-        if (e.key === "]" || e.key === ".") {
-            await handleNextId(e);
-        } else if (e.key === "[" || e.key === ",") {
-            await handlePrevId(e);
-        } else if (e.key === "Enter") {
-            await handleApplyButton(e);
-        }
-    }
-
     useEffect(() => {
         invokeContractFunction(tokenId);
     }, [])
 
-    useEffect(() => {
-        window.addEventListener("keydown", handleGlobalKeyPress);
-        return () => window.removeEventListener("keydown", handleGlobalKeyPress);
-    }, [handleGlobalKeyPress]);
+    useKeypress("Enter", handleApplyButton);
+    useKeypress(["]", "."], handleNextId);
+    useKeypress(["[", ","], handlePrevId);
 
     return (
       <main className="font-mono text-sm whitespace-nowrap" style={{opacity: pageOpacity}}>      

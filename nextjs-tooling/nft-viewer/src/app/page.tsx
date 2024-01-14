@@ -132,7 +132,7 @@ export default function Home() {
     useKeypress(["[", ","], handlePrevId);
 
     return (
-      <main className="font-mono text-sm whitespace-nowrap" style={{opacity: pageOpacity}}>      
+      <main className="font-mono text-sm text-black whitespace-nowrap" style={{opacity: pageOpacity}}>      
           { isHidden && 
               <div className={"text-xs " + (responsive ? "w-full" : PAGE_WIDTH)}>
                   <div className="mt-2 flex justify-center items-center text-gray-500">

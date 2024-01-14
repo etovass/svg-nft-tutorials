@@ -26,7 +26,7 @@ export function parseDataUrl(dataUrl: string) {
         base64Encoding = dataUrl.indexOf(";base64") >= 0;
     }
 
-    if (base64Encoding) {
+    if (base64Encoding && mediaType == "application/json") {
         data = Base64.decode(data);
     }
 

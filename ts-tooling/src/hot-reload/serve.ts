@@ -7,7 +7,7 @@ import * as path from 'path'
 import { fileURLToPath } from 'url'
 import EventEmitter from 'events'
 import { Eta } from 'eta'
-import { colorJsonHtml } from '../common/color-json.ts'
+import { colorJsonHtml } from '../common/color-json'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -26,10 +26,10 @@ type WebpageData = {
     errorContent?: null
 }
 
-export async function serve(handler, initialTokenId: number) {
+export async function serve(handler: any, initialTokenId: number) {
     const events = new EventEmitter()
 
-    function requestListener(req, res) {
+    function requestListener(req: any, res: any) {
         if (req.url === '/changes') {
             res.setHeader('Content-Type', 'text/event-stream')
             res.writeHead(200)
@@ -62,7 +62,7 @@ export async function serve(handler, initialTokenId: number) {
 
         res.writeHead(200)
         handler(tokenId).then(
-            (result) => {
+            (result: WebpageData) => {
                 webpage({
                     content: result.content,
                     json: result.json
@@ -79,9 +79,9 @@ export async function serve(handler, initialTokenId: number) {
                 })
             },
 
-            (error) => {
+            (error: any) => {
                 webpage({
-                    errorContent: error.message,
+                    errorContent: (error.message || error),
                 }).then((response) => {
                     res.end(response)
                 })

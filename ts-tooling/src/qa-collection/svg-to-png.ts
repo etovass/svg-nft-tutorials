@@ -1,7 +1,7 @@
 import * as fs from 'fs'
 import { Resvg, ResvgRenderOptions } from '@resvg/resvg-js'
 
-export async function convertSvgFileToPNG(svgContent, pngFileName: string) {
+export async function convertSvgFileToPNG(svgContent: string, pngFileName: string) {
     const opts: ResvgRenderOptions = {
         background: 'rgba(255, 255, 255, 1)',
         fitTo: {

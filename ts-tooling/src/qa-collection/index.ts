@@ -3,12 +3,12 @@ import * as path from 'path'
 import chalk from 'chalk'
 
 import { homedir } from 'os'
-import { callTestContract, getForgeConfig, FOUNDRY_PROFILE } from '../common/run.ts'
-import { formatNumber } from '../common/utils.ts'
+import { callTestContract, getForgeConfig, FOUNDRY_PROFILE } from '../common/run'
+import { formatNumber } from '../common/utils'
 import { fileURLToPath } from 'url'
-import { convertSvgFileToPNG } from './svg-to-png.ts'
-import { colorJsonConsole } from '../common/color-json.ts'
-import { Content } from '../common/parser.ts'
+import { convertSvgFileToPNG } from './svg-to-png'
+import { colorJsonConsole } from '../common/color-json'
+import { Content } from '../common/parser'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -23,7 +23,7 @@ const END_ID = CMD_PARAMS[4]
 const GAS_WARNING_THRESHOLD = 25_000_000
 const GAS_ERROR_THRESHOLD = 30_000_000
 
-let occurences = {}
+let occurences: any = {}
 
 function processJSON(json: any) {
     if (!json) return

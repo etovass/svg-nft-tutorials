@@ -84,7 +84,7 @@ export default function Home() {
         } 
 
         if (c.contentType == ContentType.SVG) {
-            return <img src={'data:image/svg+xml;base64,' + Base64.encode(c.content)} alt=''></img>
+            return <img src={c.content} alt=''></img>
         }
 
         // wrap PNG and JPG to img
@@ -180,7 +180,6 @@ export default function Home() {
                   </div>
 
                   <div className="mt-2 flex flex-row items-center justify-between">
-                        
                         <div className="flex flex-row items-center jutify-start">
                             <input className="self-start" type="range" min="128" max="1024" value={viewWidth} onChange={handleViewWidthChange} />
                             <span className="ml-4 text-xs">{viewWidth}x{viewWidth} px</span>

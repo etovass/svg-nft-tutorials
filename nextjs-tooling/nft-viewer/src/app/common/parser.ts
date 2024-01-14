@@ -1,3 +1,4 @@
+import { Base64 } from 'js-base64';
 import { parseDataUrl } from './data-url-parser';
 
 export enum ContentType {
@@ -5,6 +6,7 @@ export enum ContentType {
     JPG,
     PNG,
     HTML, 
+    Link,
     Unknown
 }
 
@@ -117,6 +119,7 @@ export function parseContractFunctionOutput(output: string, gas = 0, trimSize = 
 }
 
 function decodeOutput(output: string, label?: string): Content {
+    let outputLowercase = output.toLocaleLowerCase();
     let mimeContent = parseDataUrl(output);
     let contentType = ContentType.Unknown;
     let subtype;
@@ -127,8 +130,6 @@ function decodeOutput(output: string, label?: string): Content {
             subtype = subtype.substring(0, subtype.length - 4);
         }
     } else {
-        let outputLowercase = output.toLocaleLowerCase();
-
         if (outputLowercase.startsWith('<svg')) {
             subtype = 'svg';
         } else if (outputLowercase.startsWith('<html')) {
@@ -146,13 +147,41 @@ function decodeOutput(output: string, label?: string): Content {
         contentType = ContentType.JPG;
     } else if (subtype == 'html') {
         contentType = ContentType.HTML;
+    } else if (output.startsWith("http")) {
+        contentType = ContentType.Link;
     }
+
 
     if (contentType == ContentType.Unknown) {
         throw new Error('Unsupported image format ' + (label ? 'for attribute: ' + label : '') +  ' Not a recognized image! \n' + output);
     }
 
-    let content = (mimeContent ? mimeContent.data : output);
+    let content; // = output;//(mimeContent ? mimeContent.data : output);
+
+    if (mimeContent) {
+        // mime encode - do not touch it
+        content = output;
+    } else {
+        if (outputLowercase.startsWith("http")) {
+            // link - do not touch it
+            content = output;
+        } else if (outputLowercase.startsWith("<svg")) {
+            content = "data:image/svg+xml;base64," + Base64.encode(output);
+        } else {
+            content = output;
+        }
+    }
+
+    if (contentType == ContentType.HTML) {
+        if (output.startsWith('data:text/html;base64,')) {
+            // decode html to string, since we will show it in iframe in srcdoc element
+            content = Base64.decode(output.substring(22)); 
+        }
+    } else if (contentType == ContentType.SVG) {
+        if (output.startsWith("data:image/svg+xml;utf8,")) {
+            content = "data:image/svg+xml;base64," + Base64.encode(mimeContent?.data || "");
+        }
+    }
 
     return {content, contentType, label};
 }

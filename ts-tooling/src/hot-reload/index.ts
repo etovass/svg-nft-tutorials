@@ -3,8 +3,8 @@ import * as path from 'path'
 import chalk from 'chalk'
 import * as toml from 'toml'
 
-import { callTestContract, getForgeConfig, FOUNDRY_PROFILE } from '../common/run.ts'
-import { serve } from './serve.ts'
+import { callTestContract, getForgeConfig, FOUNDRY_PROFILE } from '../common/run'
+import { serve } from './serve'
 
 const CMD_PARAMS = process.argv.slice(2)
 const FOUNDRY_PROJECT_ROOT_PATH = CMD_PARAMS[0]

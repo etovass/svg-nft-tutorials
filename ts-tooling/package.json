@@ -2,11 +2,9 @@
   "name": "js-tooling",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "type": "module",
   "scripts": {
-    "hot-reload": "node --loader ts-node/esm ./src/hot-reload/index.ts",
-    "qa-collection": "node --loader ts-node/esm ./src/qa-collection/index.ts"
+    "hot-reload": "tsx ./src/hot-reload/index",
+    "qa-collection": "tsx ./src/qa-collection/index"
   },
   "prettier": {
     "printWidth": 100,
@@ -19,7 +17,6 @@
   "license": "MIT",
   "dependencies": {
     "@resvg/resvg-js": "^2.6.0",
-    "@types/data-urls": "^3.0.4",
     "@xmldom/xmldom": "^0.8.10",
     "chalk": "^5.3.0",
     "color-json": "^3.0.5",
@@ -33,8 +30,9 @@
     "xml-formatter": "^3.6.0"
   },
   "devDependencies": {
+    "@types/escape-html": "^1.0.4",
     "@types/node": "^20.10.4",
-    "ts-node": "^10.9.2",
+    "tsx": "^4.7.0",
     "typescript": "^5.3.3"
   }
 }

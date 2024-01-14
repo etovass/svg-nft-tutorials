@@ -6,8 +6,8 @@ import xmlFormat from 'xml-formatter'
 import escapeHtml from 'escape-html'
 import { DOMParser } from '@xmldom/xmldom'
 
-import { ContentType, ParsedOutput, parseTestOutput } from './parser.ts'
-import { formatNumber } from './utils.ts'
+import { ContentType, ParsedOutput, parseTestOutput } from './parser'
+import { formatNumber } from './utils'
 
 function validateSvgContent(parsedOutput: ParsedOutput) {
     parsedOutput.content.forEach( c => {
@@ -20,8 +20,8 @@ function validateSvgContent(parsedOutput: ParsedOutput) {
 function validateSvg(svg: string) {
     try {
         svg = xmlFormat(svg)
-    } catch (e) {
-        throw new Error(e.message + (e.cause ? '\n' + e.cause : '') + '\n' + escapeHtml(svg))
+    } catch (e: any) {
+        throw new Error((e.message || e) + (e.cause ? '\n' + e.cause : '') + '\n' + escapeHtml(svg))
     }
 
     let error = ''

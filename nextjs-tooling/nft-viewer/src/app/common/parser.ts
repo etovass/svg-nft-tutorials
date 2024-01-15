@@ -156,30 +156,12 @@ function decodeOutput(output: string, label?: string): Content {
         throw new Error('Unsupported image format ' + (label ? 'for attribute: ' + label : '') +  ' Not a recognized image! \n' + output);
     }
 
-    let content; // = output;//(mimeContent ? mimeContent.data : output);
+    let content = output;
 
     if (mimeContent) {
-        // mime encode - do not touch it
-        content = output;
-    } else {
-        if (outputLowercase.startsWith("http")) {
-            // link - do not touch it
-            content = output;
-        } else if (outputLowercase.startsWith("<svg")) {
-            content = "data:image/svg+xml;base64," + Base64.encode(output);
-        } else {
-            content = output;
-        }
-    }
-
-    if (contentType == ContentType.HTML) {
-        if (output.startsWith('data:text/html;base64,')) {
-            // decode html to string, since we will show it in iframe in srcdoc element
-            content = Base64.decode(output.substring(22)); 
-        }
-    } else if (contentType == ContentType.SVG) {
-        if (output.startsWith("data:image/svg+xml;utf8,")) {
-            content = "data:image/svg+xml;base64," + Base64.encode(mimeContent?.data || "");
+        // for SVG and HTML -> get the decoded (if base64 encoded)
+        if (contentType == ContentType.SVG || contentType == ContentType.HTML) {
+            content = mimeContent.data;
         }
     }
 

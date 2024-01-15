@@ -79,16 +79,25 @@ export default function Home() {
     }
 
     const renderContent = (c: Content) => {
+        /*
+            Logic of this method is simple:
+
+            for HTML content - pass it as it is in srdDoc attribute (if it was base64, it is decoded)
+            for SVG - encode it to data:imaget
+            for the rest - PNG/JPG/Link - pass as it is, it is either base64 ecoded picture or link 
+        */
+
+
         if (c.contentType == ContentType.HTML) {
             return <iframe style={{width:"100%", aspectRatio:"1 / 1"}} srcDoc={c.content}/>
         } 
 
         if (c.contentType == ContentType.SVG) {
-            return <img src={c.content} alt=''></img>
+            return <img src={"data:image/svg+xml;base64," + Base64.encode(c.content)} alt=''></img>
         }
 
         // wrap PNG and JPG to img
-        return <img src={c.content}></img>
+        return <img src={c.content} alt=''></img>
     }
 
     const invokeContractFunction  = async (myTokenId: number) => {

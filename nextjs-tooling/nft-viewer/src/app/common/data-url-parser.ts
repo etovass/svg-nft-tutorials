@@ -1,5 +1,6 @@
 
 import { Base64 } from 'js-base64';
+import { unescape } from 'querystring';
 
 export function parseDataUrl(dataUrl: string) {
     if (!dataUrl.startsWith("data:")) return null;
@@ -26,12 +27,14 @@ export function parseDataUrl(dataUrl: string) {
         base64Encoding = dataUrl.indexOf(";base64") >= 0;
     }
 
-    if (base64Encoding && mediaType == "application/json") {
-        data = Base64.decode(data);
+    if (base64Encoding) {
+        if (mediaType == "application/json" || mediaType == "text/html" || mediaType == "image/svg+xml") {
+            data = Base64.decode(data);
+        }
     }
 
     if (data.startsWith('%3C')) {
-        data = decodeURI(data);
+        data = decodeURIComponent(data);
     }
 
     return {mediaType, data};

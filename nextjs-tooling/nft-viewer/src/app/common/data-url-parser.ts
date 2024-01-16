@@ -33,7 +33,7 @@ export function parseDataUrl(dataUrl: string) {
         }
     }
 
-    if (data.startsWith('%3C')) {
+    if (data.startsWith('%3C') || data.startsWith('%3c')) {
         data = decodeURIComponent(data);
     }
 

@@ -11,13 +11,13 @@ contract SVGRendererTest is AbstractTest {
         renderer = new SVGRenderer();
     }
 
-    function renderContract(uint tokenId) internal override view returns(string memory svg) {
+    function renderContract(uint tokenId) internal override returns(string memory svg) {
         (svg, ) = renderer.renderSVG(tokenId);
 
         return svg;
     }
 
-    function testSvgRenderer() public view {
+    function testSvgRenderer() public {
         super.testRenderer();
     }
 }

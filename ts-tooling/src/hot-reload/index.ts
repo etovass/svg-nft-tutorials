@@ -20,6 +20,7 @@ export async function main() {
         console.log(
             '\nExample: \n\tnpm run hot-reload -- ../tutorial-1-basic-svg-rendering test/BasicSVGRenderer.t.sol testSvgRenderer 123'
         )
+        
         console.log('\n')
         return
     }

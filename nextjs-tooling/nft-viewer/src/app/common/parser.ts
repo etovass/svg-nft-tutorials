@@ -13,6 +13,7 @@ export enum ContentType {
 export type Content = {
     label?: string;                  // usually "image", "image_data" or "animation_url" from tokenUri JSON output; Or empty if result of render method
     content: string;
+    renderedContent: string;
     contentType: ContentType;
 }
 
@@ -108,7 +109,7 @@ export function parseContractFunctionOutput(output: string, gas = 0, trimSize = 
         let c = decodeOutput(output);
         let contentType = c.contentType;
         output = c.content;
-        content.push({content: output, contentType})
+        content.push({content: output, contentType, renderedContent: renderContent(output, contentType)})
     }
 
     return {
@@ -116,6 +117,19 @@ export function parseContractFunctionOutput(output: string, gas = 0, trimSize = 
         content,
         json,
     }
+}
+
+function renderContent(content: string, contentType: ContentType) {
+    if (contentType == ContentType.HTML) {
+        return `<iframe style="width:100%" srcDoc="${content}"/>`;
+    } 
+
+    if (contentType == ContentType.SVG) {
+        return content;
+    }
+
+    // wrap PNG and JPG to img
+    return `<img src="${content}" alt=''></img>`;
 }
 
 function decodeOutput(output: string, label?: string): Content {
@@ -132,7 +146,7 @@ function decodeOutput(output: string, label?: string): Content {
     } else {
         if (outputLowercase.startsWith('<svg')) {
             subtype = 'svg';
-        } else if (outputLowercase.startsWith('<html')) {
+        } else if (outputLowercase.startsWith('<html') || outputLowercase.startsWith('<!doctype html>')) {
             subtype = 'html';
         } else {
             subtype = outputLowercase.substring(outputLowercase.lastIndexOf('.') + 1);
@@ -165,5 +179,5 @@ function decodeOutput(output: string, label?: string): Content {
         }
     }
 
-    return {content, contentType, label};
+    return {content, contentType, label, renderedContent: renderContent(content, contentType)};
 }

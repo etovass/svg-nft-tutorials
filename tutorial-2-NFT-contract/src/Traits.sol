@@ -21,7 +21,7 @@ library Traits {
     function randomTraits(RandomCtx memory rndCtx) internal pure returns (TraitsInfo memory) {
         TraitsInfo memory traits = TraitsInfo({
             figure: Figure(Random.randWithProbabilities(rndCtx, Random.probabilityArray(10, 20, 30, 40))),
-            numFigures: (1 + Random.randWithProbabilities(rndCtx, Random.probabilityArray(10, 20, 30, 40))) * 50,
+            numFigures: (1 + Random.randWithProbabilities(rndCtx, Random.probabilityArray(10, 20, 30, 40))) * 25,
             startingHue: uint(Random.randRange(rndCtx, 0, 359))
         });
 

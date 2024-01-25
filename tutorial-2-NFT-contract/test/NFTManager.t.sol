@@ -1,28 +1,23 @@
 // SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.21;
 
+import {IERC721Receiver} from "@openzeppelin/contracts/interfaces/IERC721Receiver.sol";
+
 import { AbstractTest } from "./AbstractTest.t.sol";
 import { NFTManager } from '../src/NFTManager.sol';
 
-
-contract NFTManagerTestInternal is NFTManager {
-    function renderAsDataUriInternalExt(uint256 _tokenId) public view returns (string memory) {
-        return renderAsDataUriInternal(_tokenId);
-    } 
-}
-
 contract NFTManagerTest is AbstractTest {
-    NFTManagerTestInternal public renderer;
+    NFTManager public renderer;
 
     function setUp() public {
-        renderer = new NFTManagerTestInternal();
+        renderer = new NFTManager(0);
     }
 
-    function renderContract(uint tokenId) internal override view returns(string memory svg) {
-        return renderer.renderAsDataUriInternalExt(tokenId);
+    function renderContract(uint tokenId) internal override returns(string memory svg) {        
+        return renderer.renderAsDataUri(tokenId);
     }
 
-    function testSvgRenderer() public view {
+    function testSvgRenderer() public {
         super.testRenderer();
     }
 }

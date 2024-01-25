@@ -22,7 +22,7 @@ function findNetworkIndexById(networkId: string) {
     throw "Invalid network id: " + networkId;
 }
 
-export async function readContract(networkId: string, address: string, functionName: string, tokenId: number, tokenIdType: string, customNodeUrl: string) {
+export async function readContract(networkId: string, address: string, functionName: string, tokenId: number, tokenIdType: string, customNodeUrl: string, secondParamValue?: string, secondParamType?: string) {
     let client: PublicClient;
 
     let networkIndex = findNetworkIndexById(networkId);
@@ -76,7 +76,12 @@ export async function readContract(networkId: string, address: string, functionN
 
     let args = [
         tokenId.toString()
-    ]
+    ];
+
+    if (secondParamValue) {
+        abi[0].inputs.push({ name: '_seed', type: (secondParamType || "uint256") });
+        args.push(secondParamValue);
+    }
 
     let result = await client.readContract({address: addressString, functionName, abi, args});
 

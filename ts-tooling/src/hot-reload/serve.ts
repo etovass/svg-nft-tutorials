@@ -1,6 +1,6 @@
 // adapted from https://github.com/w1nt3r-eth/hot-chain-svg/blob/main/src/serve.js
 
-import * as http from 'http'
+import * as http from 'http';
 import * as url from 'url'
 import { readFileSync } from 'fs'
 import * as path from 'path'
@@ -35,8 +35,11 @@ export async function serve(handler: any, initialTokenId: number) {
             res.writeHead(200)
             const sendEvent = () => res.write('event: change\ndata:\n\n')
             events.on('change', sendEvent)
-            req.on('close', () => events.off('change', sendEvent))
-            return
+            req.on('close', () => {
+                res.end();
+                events.off('change', sendEvent);
+            });
+            return;
         }
 
         if (req.url != '/') {
@@ -89,7 +92,7 @@ export async function serve(handler: any, initialTokenId: number) {
         )
     }
 
-    const server = http.createServer(requestListener)
+    const server = http.createServer({}, requestListener);
 
     server.on('error', (e) => {
         console.log('Error: ', e)

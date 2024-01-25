@@ -34,9 +34,7 @@ abstract contract AbstractTest is Test {
         console.log(closeTag(properyName));
     }
 
-    
-
-    function testRenderer() public view  {
+    function testRenderer() public {
         uint tokenId = getTokenId();
         
         uint gasSnapshot = gasleft();
@@ -49,5 +47,5 @@ abstract contract AbstractTest is Test {
         outputProperty(NFT_OUTPUT, rendererOutput);     
     }
 
-    function renderContract(uint tokenId) internal virtual view returns(string memory); // must be inherited 
+    function renderContract(uint tokenId) internal virtual returns(string memory); // must be inherited 
 }

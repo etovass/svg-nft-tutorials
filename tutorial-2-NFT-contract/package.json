@@ -1,6 +1,5 @@
 {
   "devDependencies": {
-    "@openzeppelin/contracts": "^5.0.1",
-    "erc721a": "^4.2.3"
+    "@openzeppelin/contracts": "^5.0.1"
   }
 }

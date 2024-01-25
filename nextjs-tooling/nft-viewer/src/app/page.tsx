@@ -31,6 +31,11 @@ export default function Home() {
     
     const [address, setAddress] = useDefaultOrSearchParam("0xb44298c4ef2f474a25a570ce23ece36ecfcd45d3", "address", paramsMap, searchParams);
     const [networkId, setNetworkId] = useDefaultOrSearchParam(NETWORKS[0].id, "network", paramsMap, searchParams);
+
+    const [hasSecondParam, setHasSecondParam] = useDefaultOrSearchParam(false, "hasSecondParam", paramsMap, searchParams);
+    const [secondParamValue, setSecondParamValue] = useDefaultOrSearchParam("1", "secondParamValue", paramsMap, searchParams);
+    const [secondParamType, setSecondParamType] = useDefaultOrSearchParam("uint256", "secondParamType", paramsMap, searchParams);
+
     const [functionName, setFunctionName] = useDefaultOrSearchParam("tokenURI", "function", paramsMap, searchParams);
     const [tokenIdType, setTokenIdType] = useDefaultOrSearchParam("uint256", "tokenIdType", paramsMap, searchParams); 
     const [customNodeUrl, setCustomNodeUrl] = useDefaultOrSearchParam("", "customNodeUrl", paramsMap, searchParams); 
@@ -66,6 +71,9 @@ export default function Home() {
     const handleTokenIdChange = (e: any) => setTokenId(parseInt(e.target.value));
     const handleCustomNodeUrlChange = (e: any) => setCustomNodeUrl(e.target.value);
     const handleNetworkChange = (e: any) => setNetworkId(e.target.value);
+    const handleHasSecondParamChange = (e: any) => setHasSecondParam(e.target.checked);
+    const handleSecondParamValueChange = (e: any) => setSecondParamValue(e.target.value);
+    const handleSecondParamTypeChange = (e: any) => setSecondParamType(e.target.value);
     const handleViewWidthChange = (e: any) => setViewWidth(e.target.value);
     const handleShowBorderChange = (e: any) => setShowBorder(e.target.checked);
     const handleResponsiveChange = (e: any) => setResponsive(e.target.checked);
@@ -105,7 +113,8 @@ export default function Home() {
         setPageOpacity(0.25);
 
         try {
-            let result = await readContract(networkId, address, functionName, myTokenId, tokenIdType, customNodeUrl);
+            let result = await readContract(networkId, address, functionName, myTokenId, tokenIdType, customNodeUrl, 
+                hasSecondParam ? secondParamValue : null, hasSecondParam ? secondParamType : null);
             let parsed = parseContractFunctionOutput(result as string);
             
             setContent(parsed);
@@ -153,23 +162,29 @@ export default function Home() {
           }
 
           { !isHidden && <div className={"text-xs " + (responsive ? "w-full" : PAGE_WIDTH)}>
-              <div className="mx-4 mt-1 px-2 py-2 flex flex-col border-2">
-                  <div className="flex flex-row items-center">
-                      <span>address</span>
-                      <input className="ml-2 w-full border-2 rounded" value={address} onChange={handleAddressChange}/>
-                  </div>
+                <div className="mx-4 mt-1 px-2 py-2 flex flex-col border-2">
+                    <div className="flex flex-row items-center">
+                        <span>address</span>
+                        <input className="ml-2 w-full border-2 rounded" value={address} onChange={handleAddressChange}/>
+                    </div>
 
-                  <div className="mt-1 flex flex-row items-center">
-                      <span>network</span>
-                      <select className="mx-2 border-2 rounded" value={networkId} onChange={handleNetworkChange}>
-                          { NETWORKS.map((n,ind) => (
-                                <option key={n.id} value={n.id}>
-                                    {n.label}
-                                </option>
-                            ))
-                          }
-                      </select>
-                  </div>
+                    <div className="mt-1 flex flex-row items-center justify-between">
+                        <div className="flex flex-row items-center">
+                            <span>network</span>
+                            <select className="mx-2 border-2 rounded" value={networkId} onChange={handleNetworkChange}>
+                                { NETWORKS.map((n,ind) => (
+                                        <option key={n.id} value={n.id}>
+                                            {n.label}
+                                        </option>
+                                    ))
+                                }
+                            </select>
+                        </div>
+                        <div className="flex flex-row items-center">
+                            <span className="text-[10px]">add second param?</span>
+                            <input className="ml-2 w-[10px] h-[10px]" type="checkbox" id="responsive" checked={hasSecondParam} onChange={handleHasSecondParamChange}/>
+                        </div>      
+                    </div>
 
                   { (networkId == CUSTOM_NETWORK_ID) && <div className="mt-1 flex flex-row items-center">
                       <span>node url</span>
@@ -180,13 +195,27 @@ export default function Home() {
                   <div className="mt-1 flex flex-row justify-between"> 
                       <div className="flex flex-row items-center">
                           <span>function</span>
-                          <input className="ml-2 border-2 rounded w-24" value={functionName} onChange={handleFunctionNameChange}/>
+                          <input className="ml-2 border-2 rounded w-48" value={functionName} onChange={handleFunctionNameChange}/>
                       </div>
                       <div className="ml-4 flex flex-row items-center">
                           <span>tokenId type</span>
                           <input className="ml-2 border-2 rounded w-16" value={tokenIdType} onChange={handleTokenIdTypeChange}/>
                       </div>
                   </div>
+
+                  { hasSecondParam && 
+                        <div className="mt-1 flex flex-row justify-between"> 
+                            <div className="flex flex-row items-center">
+                                <span>second param value</span>
+                                <input className="ml-2 border-2 rounded w-36" value={secondParamValue} onChange={handleSecondParamValueChange}/>
+                            </div>
+                            <div className="ml-4 flex flex-row items-center">
+                                <span>second param type</span>
+                                <input className="ml-2 border-2 rounded w-16" value={secondParamType} onChange={handleSecondParamTypeChange}/>
+                            </div>
+                        </div>
+
+                  }
 
                   <div className="mt-2 flex flex-row items-center justify-between">
                         <div className="flex flex-row items-center jutify-start">

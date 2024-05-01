@@ -24,6 +24,8 @@ Clone the repostiry and modify it to meet your needs
 ```
 $ git clone https://github.com/etovass/svg-nft-tutorials
 $ cd svg-nft-tutorials
+$ cd next-js-tooling/nft-viewer
+$ npm update
 $ cd ts-tooling
 $ npm update
 ```

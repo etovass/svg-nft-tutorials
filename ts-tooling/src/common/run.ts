@@ -19,25 +19,24 @@ function validateSvgContent(parsedOutput: ParsedOutput) {
 
 function validateSvg(svg: string) {
     try {
-        svg = xmlFormat(svg)
+        svg = xmlFormat(svg);
     } catch (e: any) {
-        throw new Error((e.message || e) + (e.cause ? '\n' + e.cause : '') + '\n' + escapeHtml(svg))
+        throw new Error((e.message || e) + (e.cause ? '\n' + e.cause : '') + '\n' + escapeHtml(svg));
     }
 
-    let error = ''
+    let error = '';
 
     new DOMParser({
         locator: {},
-        errorHandler: function (level: any, msg: string) {
-            error += msg + '\n'
+        onError: function (level: any, msg: string) {
+            error += msg + '\n';
         },
-    }).parseFromString(svg)
+    }).parseFromString(svg, "image/svg+xml"); // Specify the correct MIME type here
 
     if (error.length > 0) {
-        throw new Error(error + '\n' + escapeHtml(svg))
+        throw new Error(error + '\n' + escapeHtml(svg));
     }
 }
-
 export const FOUNDRY_PROFILE = 'default'
 
 export async function getForgeConfig(contractRootDir: string) {

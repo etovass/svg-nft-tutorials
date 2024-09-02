@@ -4,7 +4,7 @@ import chalk from 'chalk'
 import * as path from 'path'
 import xmlFormat from 'xml-formatter'
 import escapeHtml from 'escape-html'
-import { DOMParser } from '@xmldom/xmldom'
+import { DOMParser, MIME_TYPE } from '@xmldom/xmldom'
 
 import { ContentType, ParsedOutput, parseTestOutput } from './parser'
 import { formatNumber } from './utils'
@@ -27,11 +27,11 @@ function validateSvg(svg: string) {
     let error = '';
 
     new DOMParser({
-        locator: {},
+        
         onError: function (level: any, msg: string) {
             error += msg + '\n';
         },
-    }).parseFromString(svg, "image/svg+xml"); // Specify the correct MIME type here
+    }).parseFromString(svg, MIME_TYPE.XML_SVG_IMAGE); // Specify the correct MIME type here
 
     if (error.length > 0) {
         throw new Error(error + '\n' + escapeHtml(svg));

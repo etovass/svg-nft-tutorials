@@ -121,9 +121,10 @@ export function parseContractFunctionOutput(output: string, gas = 0, trimSize = 
 
 function renderContent(content: string, contentType: ContentType) {
     if (contentType == ContentType.HTML) {
-        return `<iframe style="width:100%" srcDoc="${content}"/>`;
+        let srcDoc = "data:text/html;base64," + btoa(content);
+        return `<iframe style="width:100%; height:100%" src="${srcDoc}"/></iframe>`;
     } 
-
+    
     if (contentType == ContentType.SVG) {
         return content;
     }

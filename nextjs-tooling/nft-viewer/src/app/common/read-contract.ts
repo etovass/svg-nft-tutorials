@@ -1,16 +1,16 @@
 import { Chain, Client, HttpTransport, PublicClient, createPublicClient, defineChain, http } from 'viem'
-import { mainnet, goerli, sepolia, optimism, optimismGoerli, optimismSepolia } from 'viem/chains';
+import { mainnet, goerli, sepolia, optimism, optimismGoerli, optimismSepolia, base, baseSepolia } from 'viem/chains';
 import { Address} from 'abitype';
 
 export const CUSTOM_NETWORK_ID = "custom";
 
 export const NETWORKS = [
-    {id: "mainnet", label: "Ethereum Mainnet", chain: mainnet},
-    {id: "goerli", label: "Ethereum Goerli", chain: goerli},
-    {id: "sepolia", label: "Ethereum Sepolia", chain: sepolia},
-    {id: "optimism-mainnet", label: "Optimism Mainnet", chain: optimism},
-    {id: "optimism-goerli", label: "Optimism Goerli", chain: optimismGoerli},
-    {id: "optimism-sepolia", label: "Optimism Sepolia", chain: optimismSepolia},
+    {id: "eth-mainnet", label: "Ethereum Mainnet", chain: mainnet},
+    {id: "eth-sepolia", label: "Ethereum Sepolia", chain: sepolia},
+    {id: "opt-mainnet", label: "Optimism Mainnet", chain: optimism},
+    {id: "opt-sepolia", label: "Optimism Sepolia", chain: optimismSepolia},
+    {id: "base-mainnet", label: "Base Mainnet", chain: base},
+    {id: "base-sepolia", label: "Base Sepolia", chain: baseSepolia},
     {id: CUSTOM_NETWORK_ID, label: "Custom", chain: null},
 ];
 
@@ -52,8 +52,8 @@ export async function readContract(networkId: string, address: string, functionN
     } else {
         let transport: HttpTransport;
 
-        if (process.env.NEXT_PUBLIC_INFURA_API_KEY) {
-            transport = http(`https://${NETWORKS[networkIndex].id}.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_API_KEY}`);
+        if (process.env.NEXT_PUBLIC_ALCHEMY_API_KEY) {
+            transport = http(`https://${NETWORKS[networkIndex].id}.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`);
         } else {
             console.warn("INFURA_API_KEY is not set, using default cloudflare public nodes, which are limited and will return errors in some contracts")
             transport = http();

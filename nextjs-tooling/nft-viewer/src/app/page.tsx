@@ -219,7 +219,7 @@ export default function Home() {
 
                   <div className="mt-2 flex flex-row items-center justify-between">
                         <div className="flex flex-row items-center jutify-start">
-                            <input className="self-start" type="range" min="128" max="1024" value={viewWidth} onChange={handleViewWidthChange} />
+                            <input className="self-start" type="range" min="24" max="1024" value={viewWidth} onChange={handleViewWidthChange} />
                             <span className="ml-4 text-xs">{viewWidth}x{viewWidth} px</span>
                         </div>
 

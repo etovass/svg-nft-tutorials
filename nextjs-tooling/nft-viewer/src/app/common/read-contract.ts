@@ -55,7 +55,7 @@ export async function readContract(networkId: string, address: string, functionN
         if (process.env.NEXT_PUBLIC_ALCHEMY_API_KEY) {
             transport = http(`https://${NETWORKS[networkIndex].id}.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`);
         } else {
-            console.warn("INFURA_API_KEY is not set, using default cloudflare public nodes, which are limited and will return errors in some contracts")
+            console.warn("ALCHEMY_API_KEY is not set, using default cloudflare public nodes, which are limited and will return errors in some contracts")
             transport = http();
         }
 

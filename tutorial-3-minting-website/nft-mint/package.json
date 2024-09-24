@@ -1,0 +1,32 @@
+{
+  "name": "nft-mint",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "wagmi:generate": "cd ../../tutorial-2-NFT-contract && forge clean && forge build && cd ../tutorial-3-minting-website/nft-mint && wagmi generate"
+  },
+  "dependencies": {
+    "@rainbow-me/rainbowkit": "^2.1.6",
+    "@tanstack/react-query": "^5.56.2",
+    "next": "14.2.13",
+    "react": "^18",
+    "react-dom": "^18",
+    "viem": "^2.21.10",
+    "wagmi": "^2.12.12"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@wagmi/cli": "^2.1.16",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.13",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}

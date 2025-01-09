@@ -2,7 +2,6 @@
 pragma solidity ^0.8.21;
 
 import {Utils} from './Utils.sol';
-import {Random, RandomCtx} from './Random.sol';
 import {DynamicBuffer} from './DynamicBuffer.sol';
 import {Test} from 'forge-std/Test.sol';
 /**
@@ -27,23 +26,23 @@ contract BasicSVGRenderer {
     }
 
     function getSvgStringConcat(uint tokenId) public pure returns (string memory) {
-        string memory circles = "";
+        string memory svg = "";
         
         for (uint i=0; i < tokenId; i++) { 
-            circles = string.concat(circles, '<circle cx="10" cy="10" r="10" fill="red"/>');
+            svg = string.concat(svg, '<circle cx="10" cy="10" r="10" fill="red"/>');
         }
 
-        return string.concat('<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin meet" viewBox="0 0 512 512">',circles,'</svg>');
+        return string.concat('<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin meet" viewBox="0 0 512 512">',svg,'</svg>');
     }
 
     function getSvgAbiEncodePacked(uint tokenId) public pure returns (string memory) {
-        string memory circles = "";
+        string memory svg = "";
         
         for (uint i=0; i < tokenId; i++) { 
-            circles = string(abi.encodePacked(circles, '<circle cx="10" cy="10" r="10" fill="red"/>'));
+            svg = string(abi.encodePacked(svg, '<circle cx="10" cy="10" r="10" fill="red"/>'));
         }
 
-        return string(abi.encodePacked('<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin meet" viewBox="0 0 512 512">',circles,'</svg>'));
+        return string(abi.encodePacked('<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin meet" viewBox="0 0 512 512">',svg,'</svg>'));
     }
 
     function getSvgDynamicBuffer(uint tokenId) public pure returns (string memory) {

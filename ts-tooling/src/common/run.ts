@@ -67,7 +67,7 @@ export async function callTestContract(
     }
 
     const { stdout, command } = await execaCommand(
-        `forge test --root ${contractRootDir} --match-path ${testContractName} --match-test ${testContractMethod} -vv`,
+        `forge test --block-gas-limit 10000000000 --root ${contractRootDir} --match-path ${testContractName} --match-test ${testContractMethod} -vv`,
         {
             extendEnv: true,
             env: {

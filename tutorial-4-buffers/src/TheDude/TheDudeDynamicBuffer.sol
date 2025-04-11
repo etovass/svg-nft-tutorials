@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2021 the ethier authors (github.com/divergencetech/ethier)
 
-pragma solidity 0.8.21;
+pragma solidity ^0.8.21;
 
 /// @title DynamicBuffer
 /// @author David Huber (@cxkoda) and Simon Fremaux (@dievardump). See also
@@ -12,7 +12,7 @@ pragma solidity 0.8.21;
 /// @dev First, allocate memory.
 ///      Then use `buffer.appendUnchecked(theBytes)` or `appendSafe()` if
 ///      bounds checking is required.
-library DynamicBuffer {
+library TheDudeDynamicBuffer {
     /// @notice Allocates container space for the DynamicBuffer
     /// @param capacity_ The intended max amount of bytes in the buffer
     /// @return buffer The memory location of the buffer

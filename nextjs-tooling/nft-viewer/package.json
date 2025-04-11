@@ -11,7 +11,7 @@
   "dependencies": {
     "js-base64": "^3.7.5",
     "json-colorizer": "^2.2.2",
-    "next": "14.0.4",
+    "next": "14.2.26",
     "react": "^18",
     "react-dom": "^18",
     "react-tooltip": "^5.25.1",

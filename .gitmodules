@@ -1,0 +1,9 @@
+[submodule "tutorial-1-basic-svg-rendering/lib/forge-std"]
+	path = tutorial-1-basic-svg-rendering/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "tutorial-2-NFT-contract/lib/forge-std"]
+	path = tutorial-2-NFT-contract/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "tutorial-4-buffers/lib/forge-std"]
+	path = tutorial-4-buffers/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
